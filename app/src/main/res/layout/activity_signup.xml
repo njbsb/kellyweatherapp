@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SignupActivity"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@android:color/holo_blue_dark"
+    style="@style/AppTheme.NoActionBar">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kelly's Weather App"
+        android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:padding="4dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp"
+        />
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:id="@+id/et_name"
+        android:inputType="text"
+        android:textColor="@android:color/white"/>
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:id="@+id/et_email"
+        android:inputType="textEmailAddress"
+        android:textColor="@android:color/white"/>
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:id="@+id/et_pass"
+        android:inputType="textPassword"
+        android:textColor="@android:color/white"/>
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Confirm Password"
+        android:id="@+id/et_confirmpass"
+        android:inputType="textPassword"
+        android:textColor="@android:color/white"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_signup"
+        android:text="Sign up"
+        android:textAllCaps="false"
+        android:layout_marginTop="6dp"
+        />
+    <TextView
+        android:layout_marginTop="4dp"
+        android:id="@+id/text_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login here"
+        android:textColor="@android:color/white"/>
+
+</LinearLayout>

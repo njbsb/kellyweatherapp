@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "908317357765",
+    "firebase_url": "https://kellyweatherapp.firebaseio.com",
+    "project_id": "kellyweatherapp",
+    "storage_bucket": "kellyweatherapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908317357765:android:d813cfbca3f461951de2ac",
+        "android_client_info": {
+          "package_name": "com.fyp.kellyweatherapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908317357765-g0enndnj5617cb55nenl3u2e9t4u06rt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fyp.kellyweatherapp",
+            "certificate_hash": "fa0b1a1edf0267c43fbd4b0912fe284031f70b29"
+          }
+        },
+        {
+          "client_id": "908317357765-r0o5ln9g9qnttnpqdbt0o0q89rbjr152.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzdfyGNUrFohfWZMAl9hKac4E2IFkhqcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908317357765-r0o5ln9g9qnttnpqdbt0o0q89rbjr152.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908317357765:android:4b12d504dfc4361d1de2ac",
+        "android_client_info": {
+          "package_name": "com.fyp.weathermapv4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908317357765-485q0prs64urlu9l7egseukg3104263u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fyp.weathermapv4",
+            "certificate_hash": "fa0b1a1edf0267c43fbd4b0912fe284031f70b29"
+          }
+        },
+        {
+          "client_id": "908317357765-r0o5ln9g9qnttnpqdbt0o0q89rbjr152.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzdfyGNUrFohfWZMAl9hKac4E2IFkhqcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908317357765-r0o5ln9g9qnttnpqdbt0o0q89rbjr152.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

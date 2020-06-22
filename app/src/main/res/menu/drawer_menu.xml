@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="General">
+        <menu>
+            <item
+                android:id="@+id/itemHome"
+                android:icon="@drawable/ic_home"
+                android:title="Home" />
+            <item
+                android:id="@+id/itemProfile"
+                android:icon="@drawable/ic_profile"
+                android:title="Profile" />
+            <item
+                android:id="@+id/itemPlanner"
+                android:icon="@drawable/ic_planner"
+                android:title="Planner" />
+        </menu>
+    </item>
+    <item android:title="Actions">
+        <menu>
+            <item
+                android:id="@+id/itemExit"
+                android:icon="@drawable/ic_exit"
+                android:title="Exit/Sign Out" />
+        </menu>
+    </item>
+
+</menu>
