@@ -59,6 +59,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private WeatherData weatherData;
     private CurrentWeatherData currentWeatherData;
 
+    private static String TAG = "HomeFragment";
     public static String baseURL = "https://api.openweathermap.org/";
     public static String exclude = "minutely,hourly";
     public static String unit = "metric";
@@ -82,6 +83,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         latitude = PrefConfig.loadLatitude(Objects.requireNonNull(getContext()));
         longitude = PrefConfig.loadLongitude(Objects.requireNonNull(getContext()));
+        shortToast(latitude + " xxxx " + longitude);
+        // Check if CurrentWeatherData refresh only when date is different
 
 //        SharedPreferences preferences = getContext().getSharedPreferences("com.fyp.kellyweatherapp", Context.MODE_PRIVATE);
 //        Map<String, ?> alldata = preferences.getAll();
@@ -89,10 +92,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if(PrefConfig.loadWeatherData(getContext()) == null
                 || PrefConfig.loadCurrentWeatherData(getContext()) == null) {
             shortToast("pref is null");
+            Log.d(TAG, "onCreateView: PrefConfig WD and CWD is null");
             getAPIdata();
         }
         else {
             shortToast("pref is not null");
+            Log.d(TAG, "onCreateView: PrefConfig WD and CWD are not null");
             Date date_today = Calendar.getInstance().getTime();
             Date date_inPref = PrefConfig.loadWeatherData(getContext()).getDaily().get(0).getDateasDate();
             boolean dateUptoDate = compareDates(date_today, date_inPref);

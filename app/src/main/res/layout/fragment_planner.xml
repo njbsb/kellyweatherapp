@@ -38,7 +38,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
         android:layout_centerHorizontal="true"
-        android:shadowRadius="@android:integer/config_shortAnimTime"/>
+        />
 
 <!--    <ImageView-->
 <!--        android:id="@+id/forecast_icon"-->

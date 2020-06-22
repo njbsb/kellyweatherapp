@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -36,6 +37,7 @@ import com.fyp.kellyweatherapp.model.User;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,6 +50,7 @@ import com.google.gson.Gson;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.INTERNET;
 
 public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener, NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -57,12 +60,9 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
     private NavigationView navigationView;
-    private ViewPager viewPager;
-    private ViewPagerAdapter viewPagerAdapter;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseAuth.AuthStateListener authStateListener;
-    private FusedLocationProviderClient fusedLocationClient;
     private String latitude, longitude;
     private ProgressBar progressBar;
     private User user;
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         navigationView = findViewById(R.id.navigationView);
         drawerLayout = findViewById(R.id.drawer);
         toolbar = findViewById(R.id.toolbar);
-
     }
 
     @Override
@@ -113,8 +112,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
     }
 
-
-
     private void loadActivityUI() {
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
@@ -124,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
             Gson gson = new Gson();
             String json = gson.toJson(PrefConfig.loadUser(this));
             Log.d("USERPREF", json);
-            shortToast(json);
             name.setText(PrefConfig.loadUser(getApplicationContext()).getName());
         }
         else {
@@ -138,14 +134,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
-//        viewPager = findViewById(R.id.viewPager);
-//        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-//        viewPager.setAdapter(viewPagerAdapter);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if(PrefConfig.loadLatitude(getApplicationContext()).equals("0")
-                || PrefConfig.loadLongitude(getApplicationContext()).equals("0")) {
-            getLocation();
-        }
+        getLocation();
     }
 
     private void loadFragment() {
@@ -153,29 +142,32 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     }
 
     public void getLocation() {
-        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestRuntimePermissionLocation();
-            return;
+        if(PrefConfig.loadLatitude(this).equals("0") || PrefConfig.loadLongitude(getApplicationContext()).equals("0")) {
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestRuntimePermissionLocation();
+                return;
+            }
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    String latitude = String.valueOf(location.getLatitude());
+                    String longitude = String.valueOf(location.getLongitude());
+                    PrefConfig.saveLatitude(getApplicationContext(), latitude);
+                    PrefConfig.saveLongitude(getApplicationContext(), longitude);
+                }
+            });
         }
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(MainActivity.this, location -> {
-                    if(location!= null) {
-                        latitude = String.valueOf(location.getLatitude());
-                        longitude = String.valueOf(location.getLongitude());
-                        PrefConfig.saveLatitude(getApplicationContext(), latitude);
-                        PrefConfig.saveLongitude(getApplicationContext(), longitude);
-                    }
-                    else {
-                        shortToast("Location does not exist");
-                    } });
+        // no else block bcs latitude & longitude will not be used in MainActivity UI
     }
 
     private void requestRuntimePermissionLocation() {
         ActivityCompat.requestPermissions(this, new String[] {
                 ACCESS_COARSE_LOCATION,
                 ACCESS_FINE_LOCATION,
+                INTERNET
         }, PERMISSION_REQ_CODE );
     }
 
@@ -227,8 +219,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
         @Override
         protected Object doInBackground(Object[] objects) {
-
-
 //            Looper.prepare();
 //            User user = User.getInstance();
 //            if(user.getNotesList() == null) {
@@ -240,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 //            else {
 //                shortToast(user.getNotesList().toString());
 //            }
-
 //            runOnUiThread(MainActivity.this::getLocation);
             return null;
         }

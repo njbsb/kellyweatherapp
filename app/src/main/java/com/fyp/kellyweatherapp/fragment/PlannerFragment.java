@@ -48,6 +48,7 @@ public class PlannerFragment extends DialogFragment implements View.OnClickListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
         buttonSave = view.findViewById(R.id.btn_savePlanner);
+        buttonSave.setOnClickListener(this);
 
         if(PrefConfig.loadUser(Objects.requireNonNull(getContext())) != null && PrefConfig.loadWeatherData(Objects.requireNonNull(getContext())) != null) {
             user = PrefConfig.loadUser(Objects.requireNonNull(getContext()));
