@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,10 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PlannerFragment extends DialogFragment {
+public class PlannerFragment extends DialogFragment implements View.OnClickListener {
 
     private static final String TAG = "PlannerFragment";
 
+    private Button buttonSave;
     private ImageView forecastIcon;
     private TextView forecastDay, forecastDate;
     private ViewPager viewPager;
@@ -45,6 +47,7 @@ public class PlannerFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
+        buttonSave = view.findViewById(R.id.btn_savePlanner);
 
         if(PrefConfig.loadUser(Objects.requireNonNull(getContext())) != null && PrefConfig.loadWeatherData(Objects.requireNonNull(getContext())) != null) {
             user = PrefConfig.loadUser(Objects.requireNonNull(getContext()));
@@ -74,30 +77,6 @@ public class PlannerFragment extends DialogFragment {
             notesList = user.getNotesList();
         }
         setUpViewPager(view);
-//        dailies = weather.getDaily();
-////        Log.i(TAG, dailies.toString());
-//        if(user.getNotesList() == null) {
-//            notesList = new ArrayList<>(); // this list is empty
-//            for(int i = 0; i<dailies.size(); i++) {
-//                Notes notes = new Notes();
-//                notes.setNoteDate(dailies.get(i).getDateasDate());
-//                notes.setUserID(user.getUserID());
-//                notes.setNoteID(String.format("%s_%s", user.getUserID(), dailies.get(i).getDt()));
-//                // later can remove noteID since we'll be checking 2 conds: userID and date
-//                notesList.add(notes);
-//                Log.i(TAG, notes.getNoteDate().toString());
-//            }
-//            user.setNotesList(notesList);
-//            PrefConfig.saveUser(getContext(), user);
-//        }
-//        else {
-//            notesList = user.getNotesList();
-//            Log.d("NOTES", notesList.toString());
-//            shortToast(notesList.toString());
-//        }
-//        forecastIcon = view.findViewById(R.id.forecast_icon);
-//        forecastDay = view.findViewById(R.id.forecast_day);
-//        forecastDate = view.findViewById(R.id.forecast_date);
         return view;
     }
 
@@ -129,4 +108,12 @@ public class PlannerFragment extends DialogFragment {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_savePlanner:
+                shortToast("clicked saved");
+                break;
+        }
+    }
 }
