@@ -19,8 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
 import com.fyp.kellyweatherapp.database.PrefConfig;
 import com.fyp.kellyweatherapp.R;
 import com.fyp.kellyweatherapp.adapter.WeatherDailyAdapter;
@@ -83,7 +81,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         latitude = PrefConfig.loadLatitude(Objects.requireNonNull(getContext()));
         longitude = PrefConfig.loadLongitude(Objects.requireNonNull(getContext()));
-        shortToast(latitude + " xxxx " + longitude);
+        if(latitude.equals("") || longitude.equals("")) {
+            shortToast("Default location at 0,0");
+        }
         // Check if CurrentWeatherData refresh only when date is different
 
 //        SharedPreferences preferences = getContext().getSharedPreferences("com.fyp.kellyweatherapp", Context.MODE_PRIVATE);

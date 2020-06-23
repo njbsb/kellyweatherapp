@@ -24,6 +24,7 @@ import com.fyp.kellyweatherapp.model.POJO.Daily;
 import com.fyp.kellyweatherapp.model.POJO.Weather;
 import com.fyp.kellyweatherapp.model.POJO.WeatherData;
 import com.fyp.kellyweatherapp.model.User;
+import com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +34,7 @@ public class PlannerFragment extends DialogFragment implements View.OnClickListe
 
     private static final String TAG = "PlannerFragment";
 
-    private Button buttonSave;
-    private ImageView forecastIcon;
-    private TextView forecastDay, forecastDate;
+    private SpringDotsIndicator springDotsIndicator;
     private ViewPager viewPager;
     private PlannerAdapter plannerAdapter;
     private WeatherData weatherData;
@@ -47,8 +46,7 @@ public class PlannerFragment extends DialogFragment implements View.OnClickListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
-        buttonSave = view.findViewById(R.id.btn_savePlanner);
-        buttonSave.setOnClickListener(this);
+        springDotsIndicator = view.findViewById(R.id.spring_dots_indicator);
 
         if(PrefConfig.loadUser(Objects.requireNonNull(getContext())) != null && PrefConfig.loadWeatherData(Objects.requireNonNull(getContext())) != null) {
             user = PrefConfig.loadUser(Objects.requireNonNull(getContext()));
@@ -57,18 +55,10 @@ public class PlannerFragment extends DialogFragment implements View.OnClickListe
         }
 
         if(user.getNotesList() == null) {
-            // request for location
-            // get latitude and longitude
-            // get weather data again from api
-            // OR create basic list of size 8
             notesList = new ArrayList<>();
             for(int i = 0; i<8; i++) {
                 Notes notes = new Notes();
                 notes.setUserID(user.getUserID());
-//                notes.setNoteDate(dailies.get(i).getDateasDate());
-//                notes.setUserID(user.getUserID());
-//                notes.setNoteID(String.format("%s_%s", user.getUserID(), dailies.get(i).getDt()));
-                // later can remove noteID since we'll be checking 2 conds: userID and date
                 notesList.add(notes);
             }
             user.setNotesList(notesList);
@@ -84,8 +74,10 @@ public class PlannerFragment extends DialogFragment implements View.OnClickListe
     private void setUpViewPager(View view) {
         plannerAdapter = new PlannerAdapter(notesList, weatherData, getContext());
         viewPager = view.findViewById(R.id.planner_viewpager);
+
         viewPager.setAdapter(plannerAdapter);
-        viewPager.setPadding(130, 0, 130, 0);
+        viewPager.setPadding(110, 0, 110, 0);
+        springDotsIndicator.setViewPager(viewPager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -108,13 +100,13 @@ public class PlannerFragment extends DialogFragment implements View.OnClickListe
         Toast.makeText(getContext(), m, Toast.LENGTH_SHORT).show();
     }
 
+    private void saveNotes() {
+
+    }
+
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_savePlanner:
-                shortToast("clicked saved");
-                break;
-        }
+
     }
 }
