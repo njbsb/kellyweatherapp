@@ -91,12 +91,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //        shortToast("alldata size: " + alldata.size());
         if(PrefConfig.loadWeatherData(getContext()) == null
                 || PrefConfig.loadCurrentWeatherData(getContext()) == null) {
-            shortToast("pref is null");
+            shortToast("No data in local storage");
             Log.d(TAG, "onCreateView: PrefConfig WD and CWD is null");
             getAPIdata();
         }
         else {
-            shortToast("pref is not null");
+            shortToast("Showing data from local storage");
             Log.d(TAG, "onCreateView: PrefConfig WD and CWD are not null");
             Date date_today = Calendar.getInstance().getTime();
             Date date_inPref = PrefConfig.loadWeatherData(getContext()).getDaily().get(0).getDateasDate();
@@ -239,6 +239,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 getAPIdata();
                 enableUI();
                 progressbarHome.setVisibility(View.INVISIBLE);
+                shortToast("Weather data refreshed");
                 break;
         }
     }

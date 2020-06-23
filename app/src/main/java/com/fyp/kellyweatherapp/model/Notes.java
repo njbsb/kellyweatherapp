@@ -1,11 +1,9 @@
 package com.fyp.kellyweatherapp.model;
 
 import java.util.Date;
-import java.util.List;
 
 public class Notes {
     private String userID;
-    private String noteID;
     private String notes;
     private Date noteDate;
     // notesID = userID + date.toString()
@@ -20,13 +18,13 @@ public class Notes {
         this.userID = userID;
     }
 
-    public String getNoteID() {
-        return noteID;
-    }
-
-    public void setNoteID(String noteID) {
-        this.noteID = noteID;
-    }
+//    public String getNoteID() {
+//        return noteID;
+//    }
+//
+//    public void setNoteID(String noteID) {
+//        this.noteID = noteID;
+//    }
 
     public String getNotes() {
         return notes;

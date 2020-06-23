@@ -22,6 +22,7 @@ import com.fyp.kellyweatherapp.model.POJO.WeatherData;
 import com.fyp.kellyweatherapp.model.User;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlannerAdapter extends PagerAdapter {
@@ -52,7 +53,7 @@ public class PlannerAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.planner_item, container, false);
-
+        User user = PrefConfig.loadUser(context);
         Daily day = weatherData.getDaily().get(position);
         Weather weather = day.getWeather().get(0);
         Button plannerSaveBtn = view.findViewById(R.id.planner_savebtn);
@@ -60,13 +61,21 @@ public class PlannerAdapter extends PagerAdapter {
         TextView plannerday = view.findViewById(R.id.planner_day);
         EditText plannerNote = view.findViewById(R.id.planner_edittext);
 
-        if(PrefConfig.loadUser(context).getNotesList() != null) {
+        if(user.getNotesList() != null) {
 //            plannerNote.setText(PrefConfig.loadUser(context).getNotesList().get(position).getNotes());
-            plannerNote.setText(PrefConfig.loadUser(context).getNotesList().get(position).getNotes());
-
+            plannerNote.setText(user.getNotesList().get(position).getNotes());
         }
         else {
             plannerNote.setText("takde note");
+            List<Notes> notesList = new ArrayList<>();
+            for(int i = 0; i<weatherData.getDaily().size(); i++) {
+                Notes note = new Notes();
+                note.setNoteDate(weatherData.getDaily().get(i).getDateasDate());
+                note.setUserID(user.getUserID());
+                notesList.add(note);
+            }
+            user.setNotesList(notesList);
+            PrefConfig.saveUser(context, user);
         }
 
         plannerday.setText(String.format("%s | %s | %s", day.getDayName(), day.getDateddMM(), weather.getMain()));
@@ -77,7 +86,9 @@ public class PlannerAdapter extends PagerAdapter {
             @Override
             public void onClick(View v) {
                 String note = plannerNote.getText().toString();
-                saveNotes(context, weatherData.getDaily(), note, position);
+                if(!note.equals("")) {
+                    saveNotes(context, weatherData.getDaily(), note, position);
+                }
             }
         });
 
