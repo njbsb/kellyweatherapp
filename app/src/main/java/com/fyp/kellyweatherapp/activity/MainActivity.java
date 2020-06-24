@@ -2,6 +2,7 @@ package com.fyp.kellyweatherapp.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -13,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -47,6 +49,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+
+import java.util.Objects;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -87,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseAuth.getInstance().addAuthStateListener(this);
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -96,14 +101,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        if(firebaseAuth.getCurrentUser() == null) {
+        if (firebaseAuth.getCurrentUser() == null) {
             progressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(MainActivity.this, "Youre not logged in", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
-        }
-        else {
+        } else {
             shortToast("Signed in as: " + firebaseAuth.getUid());
             user = PrefConfig.loadUser(this);
             getLocation();
@@ -118,25 +122,20 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         navigationView.bringToFront();
         headView = navigationView.getHeaderView(0);
         name = headView.findViewById(R.id.nav_useremail);
-        if(PrefConfig.loadUser(this) != null) {
+        if (PrefConfig.loadUser(this) != null) {
             Gson gson = new Gson();
             String json = gson.toJson(PrefConfig.loadUser(this));
             Log.d("USERPREF", json);
             name.setText(PrefConfig.loadUser(getApplicationContext()).getName());
-        }
-        else {
+        } else {
             user = PrefConfig.loadUser(this);
             // get the data properly from the db
         }
-        // for the drawer
-        // to be safe, try to load user from db in case if previous retrieve method in loginactivity got cancelled
-        // load user, check if value is null. if null, retrieve again from firebase db
         setSupportActionBar(toolbar);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
-//        getLocation();
     }
 
     private void loadFragment() {
@@ -144,33 +143,81 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     }
 
     public void getLocation() {
-        if(PrefConfig.loadLatitude(this).equals("0") || PrefConfig.loadLongitude(getApplicationContext()).equals("0")) {
+        if (PrefConfig.loadLatitude(this).equals("0") || PrefConfig.loadLongitude(getApplicationContext()).equals("0")) {
             ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestRuntimePermissionLocation();
-                return;
+            } else {
+                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            String latitude = String.valueOf(location.getLatitude());
+                            String longitude = String.valueOf(location.getLongitude());
+                            PrefConfig.saveLatitude(getApplicationContext(), latitude);
+                            PrefConfig.saveLongitude(getApplicationContext(), longitude);
+                        }
+                    }
+                });
             }
-            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-            fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    String latitude = String.valueOf(location.getLatitude());
-                    String longitude = String.valueOf(location.getLongitude());
-                    PrefConfig.saveLatitude(getApplicationContext(), latitude);
-                    PrefConfig.saveLongitude(getApplicationContext(), longitude);
-                }
-            });
+
         }
         // no else block bcs latitude & longitude will not be used in MainActivity UI
     }
 
+//    private void loadLatLong() {
+//        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//        fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+//            @Override
+//            public void onSuccess(Location location) {
+//                if (location != null) {
+//                    String latitude = String.valueOf(location.getLatitude());
+//                    String longitude = String.valueOf(location.getLongitude());
+//                    PrefConfig.saveLatitude(getApplicationContext(), latitude);
+//                    PrefConfig.saveLongitude(getApplicationContext(), longitude);
+//                }
+//            }
+//        });
+//    }
+
     public void requestRuntimePermissionLocation() {
-        ActivityCompat.requestPermissions(this, new String[] {
-                ACCESS_COARSE_LOCATION,
-                ACCESS_FINE_LOCATION,
-                INTERNET
-        }, PERMISSION_REQ_CODE );
+//        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        if (ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(this), ACCESS_FINE_LOCATION)) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Location Permission Required")
+                    .setMessage("You have to give  this permission to access this app.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[] {ACCESS_COARSE_LOCATION}, 1);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+        }
+        else {
+            getLocation();
+            loadActivityUI();
+            loadFragment();
+        }
     }
 
 

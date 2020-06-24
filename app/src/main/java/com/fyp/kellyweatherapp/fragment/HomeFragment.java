@@ -3,7 +3,9 @@ package com.fyp.kellyweatherapp.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -104,7 +107,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Shar
         latitude = PrefConfig.loadLatitude(Objects.requireNonNull(getContext()));
         longitude = PrefConfig.loadLongitude(Objects.requireNonNull(getContext()));
         if(latitude.equals("0") || longitude.equals("0")) {
-            getLocationData();
+//            getLocationData();
+            ((MainActivity) Objects.requireNonNull(getActivity())).getLocation();
             latitude = PrefConfig.loadLatitude(Objects.requireNonNull(getContext()));
             longitude = PrefConfig.loadLongitude(Objects.requireNonNull(getContext()));
         }
@@ -154,11 +158,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Shar
     public void onStart() {
         super.onStart();
         if(PrefConfig.loadLatitude(Objects.requireNonNull(getContext())).equals("0") || PrefConfig.loadLongitude(getContext()).equals("0")) {
-            getLocationData();
+//            getLocationData();
+            ((MainActivity) Objects.requireNonNull(getActivity())).getLocation();
         }
-        else {
-            loadUIData();
-        }
+        loadUIData();
     }
     private static Date setTimeToMidnight(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -179,23 +182,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Shar
 
     private void getLocationData() {
         if(PrefConfig.loadLatitude(Objects.requireNonNull(getContext())).equals("0") || PrefConfig.loadLongitude(getContext()).equals("0")) {
-            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{ACCESS_FINE_LOCATION}, 1);
+
+//            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{ACCESS_FINE_LOCATION}, 1);
+
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ((MainActivity)getActivity()).requestRuntimePermissionLocation();
-                return;
+
+                ((MainActivity) Objects.requireNonNull(getActivity())).getLocation();
+//                return;
             }
-            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-            fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    String latitude = String.valueOf(location.getLatitude());
-                    String longitude = String.valueOf(location.getLongitude());
-                    PrefConfig.saveLatitude(Objects.requireNonNull(getContext()), latitude);
-                    PrefConfig.saveLongitude(getContext(), longitude);
-                    loadUIData();
-                }
-            });
+            else {
+                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+                fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        String latitude = String.valueOf(location.getLatitude());
+                        String longitude = String.valueOf(location.getLongitude());
+                        PrefConfig.saveLatitude(Objects.requireNonNull(getContext()), latitude);
+                        PrefConfig.saveLongitude(getContext(), longitude);
+                        loadUIData();
+                    }
+                });
+            }
         }
         // no else block bcs latitude & longitude will not be used in MainActivity UI
     }
@@ -315,7 +323,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Shar
             case R.id.btn_refresh:
                 disableUI();
                 progressbarHome.setVisibility(View.VISIBLE);
-                getAPIdata();
+//                getAPIdata();
+                loadUIData();
                 enableUI();
                 progressbarHome.setVisibility(View.INVISIBLE);
                 shortToast("Weather data refreshed");
@@ -328,6 +337,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Shar
 //        getAPIdata();
         if(key.equals(PrefConfig.LAT) || key.equals(PrefConfig.LON)) {
             getAPIdata();
+
+        }
+        if(key.equals(PrefConfig.CURRENT_WEATHER_DATA) || key.equals(PrefConfig.WEATHER_DATA)) {
+            loadUIData();
         }
     }
 }
