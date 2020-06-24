@@ -82,10 +82,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()) {
+                        user = PrefConfig.loadUser(getApplicationContext());
                         Toast.makeText(LoginActivity.this, "field are empty", Toast.LENGTH_SHORT).show();
                         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(mainIntent);
                         finish();
+
                     }
                     else {
                         Toast.makeText(LoginActivity.this, Objects.requireNonNull(task.getException()).toString(), Toast.LENGTH_SHORT).show();

@@ -98,10 +98,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     private void createDatabase(String name, String email, String uid) {
         // create database on firebase server
-        user = User.getInstance();
-        user.setName(name);
-        user.setEmail(email);
-        user.setUserID(uid);
-        PrefConfig.saveUser(getApplicationContext(), user);
+        try {
+            user = User.getInstance();
+            user.setName(name);
+            user.setEmail(email);
+            user.setUserID(uid);
+            PrefConfig.saveUser(getApplicationContext(), user);
+        }
+        catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
