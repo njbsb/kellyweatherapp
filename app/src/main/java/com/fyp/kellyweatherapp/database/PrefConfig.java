@@ -36,8 +36,8 @@ import java.util.List;
 public class PrefConfig {
 
     public static final String MY_PREF_NAME = "com.fyp.kellyweatherapp";
-    private static final String WEATHER_DATA = "weatherdata";
-    private static final String CURRENT_WEATHER_DATA = "currentweatherdata";
+    public static final String WEATHER_DATA = "weatherdata";
+    public static final String CURRENT_WEATHER_DATA = "currentweatherdata";
     public static final String USER = "user";
     public static final String LAT = "lat";
     public static final String LON = "lon";
