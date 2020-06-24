@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     private String latitude, longitude;
     private ProgressBar progressBar;
     private User user;
-    private TextView name;
+    public TextView name;
     private View headView;
 
     @Override
@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         else {
             shortToast("Signed in as: " + firebaseAuth.getUid());
             user = PrefConfig.loadUser(this);
+            getLocation();
             loadActivityUI();
             loadFragment();
             progressBar.setVisibility(View.INVISIBLE);
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
         else {
             user = PrefConfig.loadUser(this);
+            // get the data properly from the db
         }
         // for the drawer
         // to be safe, try to load user from db in case if previous retrieve method in loginactivity got cancelled
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
         actionBarDrawerToggle.syncState();
-        getLocation();
+//        getLocation();
     }
 
     private void loadFragment() {
@@ -163,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         // no else block bcs latitude & longitude will not be used in MainActivity UI
     }
 
-    private void requestRuntimePermissionLocation() {
+    public void requestRuntimePermissionLocation() {
         ActivityCompat.requestPermissions(this, new String[] {
                 ACCESS_COARSE_LOCATION,
                 ACCESS_FINE_LOCATION,
@@ -207,7 +209,10 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(key.equals(PrefConfig.MY_PREF_NAME)) {
-
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment, new HomeFragment()).commit();
+        }
+        if(key.equals(PrefConfig.USER)) {
+            name.setText(PrefConfig.loadUser(getApplicationContext()).getName());
         }
     }
 
