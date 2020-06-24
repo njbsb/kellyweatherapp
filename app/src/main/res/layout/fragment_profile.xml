@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/profileIcon"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,8 @@
                 android:id="@+id/txt_profileemail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="emailMaembong@mail.com"
+                android:text=""
+                android:hint="email placeholder"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
