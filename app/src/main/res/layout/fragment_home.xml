@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eee3dd">
+    android:background="@color/background">
 
     <ImageView
         android:id="@+id/currentIcon"
@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text=""
+        android:textColor="@color/textcolor"
         android:textAlignment="center"
         android:textSize="60sp"
         android:textStyle="normal"
@@ -38,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@color/textcolor"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/currentIcon"
@@ -50,26 +51,29 @@
         android:id="@+id/txt_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:hint="city, Country"
+        android:textColor="@color/textcolor"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/currentIcon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.31" />
+        app:layout_constraintVertical_bias="0.306" />
+
 
     <TextView
         android:id="@+id/txt_coordinate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="latitude, longitude"
+        android:textColor="@color/textcolor"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/txt_city"
-        app:layout_constraintStart_toStartOf="@+id/txt_city"
-        app:layout_constraintTop_toBottomOf="@+id/txt_city" />
-
+        app:layout_constraintBottom_toTopOf="@+id/currentIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_city"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
         android:id="@+id/btn_refresh"
@@ -88,7 +92,7 @@
         android:layout_height="140dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@android:color/white"
+        app:cardBackgroundColor="@color/cardColor"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/home_recycler"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +103,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp">
-
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
