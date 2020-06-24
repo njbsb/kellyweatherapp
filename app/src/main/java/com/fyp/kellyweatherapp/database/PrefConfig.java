@@ -38,13 +38,20 @@ public class PrefConfig {
     public static final String MY_PREF_NAME = "com.fyp.kellyweatherapp";
     private static final String WEATHER_DATA = "weatherdata";
     private static final String CURRENT_WEATHER_DATA = "currentweatherdata";
-    private static final String USER = "user";
-    private static final String LAT = "lat";
-    private static final String LON = "lon";
+    public static final String USER = "user";
+    public static final String LAT = "lat";
+    public static final String LON = "lon";
     private static final String TAG = "PrefConfig";
     private static User user;
 
     public static void saveUser(Context context, User user) {
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        SharedPreferences preferences = context.getSharedPreferences(MY_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(USER, json);
+        editor.apply();
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUserID());
         databaseReference.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -53,15 +60,9 @@ public class PrefConfig {
             }
         }).addOnFailureListener(e -> {
                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "saveUser: unsuccessful " + e.getMessage());
-            }
+                    Log.d(TAG, "saveUser: unsuccessful " + e.getMessage());
+                }
         );
-        Gson gson = new Gson();
-        String json = gson.toJson(user);
-        SharedPreferences preferences = context.getSharedPreferences(MY_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(USER, json);
-        editor.apply();
     }
 
     public static void saveLatitude(Context context, String lat) {
