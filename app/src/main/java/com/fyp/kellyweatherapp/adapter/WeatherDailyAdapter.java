@@ -16,8 +16,10 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyp.kellyweatherapp.R;
+import com.fyp.kellyweatherapp.database.PrefConfig;
 import com.fyp.kellyweatherapp.model.POJO.Daily;
 import com.fyp.kellyweatherapp.model.POJO.Weather;
+import com.fyp.kellyweatherapp.model.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -33,16 +35,19 @@ public class WeatherDailyAdapter extends RecyclerView.Adapter<WeatherDailyAdapte
     private ArrayList<Daily> dailyList;
     private static String imageURL = "https://openweathermap.org/img/wn/";
     private Dialog dialog;
+    private User user;
 
     public WeatherDailyAdapter(Context context, ArrayList<Daily> dailyList) {
         this.context = context;
         this.dailyList = dailyList;
+        user = PrefConfig.loadUser(context);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_viewholder, parent, false);
+
         return new ViewHolder(view);
     }
 
@@ -60,14 +65,14 @@ public class WeatherDailyAdapter extends RecyclerView.Adapter<WeatherDailyAdapte
             @Override
             public void onClick(View v) {
 //                Toast.makeText(context, String.format("Card %s clicked", day.getDayName()), Toast.LENGTH_SHORT).show();
-                loadDialog(day);
+                loadDialog(day, position);
 //                ForecastFragment dialogForecast = new ForecastFragment();
 //                dialogForecast.show(, "");
             }
         });
     }
 
-    private void loadDialog(Daily day) {
+    private void loadDialog(Daily day, int position) {
         dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_forecast);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -84,6 +89,19 @@ public class WeatherDailyAdapter extends RecyclerView.Adapter<WeatherDailyAdapte
         tv_date.setText(day.getDatefromDT());
         tv_cond.setText(String.format("%s\n(%s)", condition, conddesc));
         Picasso.get().load(day.getWeather().get(0).getIconURL()).into(img);
+        if(user.getNotesList() != null) {
+            if(user.getNotesList().get(position).getNotes() != null) {
+                if(!user.getNotesList().get(position).getNotes().equals("")) {
+                    planner.setBackgroundResource(R.drawable.ic_planner);
+                    noti.setBackgroundResource(R.drawable.ic_notif);
+                }
+                else {
+                    planner.setBackgroundResource(R.drawable.ic_planner_none);
+                    noti.setBackgroundResource(R.drawable.ic_notif_none);
+                }
+            }
+        }
+
 
         dialog.show();
     }
