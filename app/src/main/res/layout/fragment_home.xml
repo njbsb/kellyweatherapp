@@ -50,7 +50,8 @@
         android:id="@+id/txt_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="city, Country"
+
+        android:hint="city, Country"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/currentIcon"
@@ -63,7 +64,7 @@
         android:id="@+id/txt_coordinate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="latitude, longitude"
+        android:hint="latitude, longitude"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/txt_city"
         app:layout_constraintStart_toStartOf="@+id/txt_city"
