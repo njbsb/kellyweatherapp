@@ -1,14 +1,11 @@
 package com.fyp.kellyweatherapp.fragment;
 
-import android.content.Context;
+
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,9 +17,9 @@ import com.fyp.kellyweatherapp.R;
 import com.fyp.kellyweatherapp.adapter.PlannerAdapter;
 import com.fyp.kellyweatherapp.database.PrefConfig;
 import com.fyp.kellyweatherapp.model.Notes;
-import com.fyp.kellyweatherapp.model.POJO.Daily;
-import com.fyp.kellyweatherapp.model.POJO.Weather;
-import com.fyp.kellyweatherapp.model.POJO.WeatherData;
+import com.fyp.kellyweatherapp.model.pojo.Daily;
+
+import com.fyp.kellyweatherapp.model.pojo.WeatherData;
 import com.fyp.kellyweatherapp.model.User;
 import com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator;
 

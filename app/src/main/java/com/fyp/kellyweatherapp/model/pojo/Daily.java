@@ -1,4 +1,4 @@
-package com.fyp.kellyweatherapp.model.POJO;
+package com.fyp.kellyweatherapp.model.pojo;
 
 import android.annotation.SuppressLint;
 
@@ -69,8 +69,7 @@ public class Daily {
 
     public Date getDateasDate() {
         long dv = Long.valueOf(getDt())*1000;
-        Date df = new Date(dv);
-        return df;
+        return new Date(dv);
     }
 
 

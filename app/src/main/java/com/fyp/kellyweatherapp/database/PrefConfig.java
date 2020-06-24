@@ -1,26 +1,19 @@
 package com.fyp.kellyweatherapp.database;
 
-import android.Manifest;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
+
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 
-import com.fyp.kellyweatherapp.activity.MainActivity;
-import com.fyp.kellyweatherapp.activity.SignupActivity;
-import com.fyp.kellyweatherapp.model.POJO.CurrentWeatherData;
-import com.fyp.kellyweatherapp.model.POJO.WeatherData;
+import com.fyp.kellyweatherapp.model.pojo.CurrentWeatherData;
+import com.fyp.kellyweatherapp.model.pojo.WeatherData;
 import com.fyp.kellyweatherapp.model.User;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,9 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class PrefConfig {
 
@@ -53,12 +43,7 @@ public class PrefConfig {
         editor.apply();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(user.getUserID());
-        databaseReference.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "saveUser successful");
-            }
-        }).addOnFailureListener(e -> {
+        databaseReference.setValue(user).addOnSuccessListener(aVoid -> Log.d(TAG, "saveUser successful")).addOnFailureListener(e -> {
                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "saveUser: unsuccessful " + e.getMessage());
                 }
@@ -151,8 +136,7 @@ public class PrefConfig {
             Toast.makeText(context, "Weather data is empty", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "loadCurrentWeatherData: WeatherData is empty.");
         }
-        WeatherData weatherData = gson.fromJson(json, WeatherData.class);
-        return weatherData;
+        return gson.fromJson(json, WeatherData.class);
     }
 
     public static CurrentWeatherData loadCurrentWeatherData(Context context) {
@@ -164,8 +148,7 @@ public class PrefConfig {
             Toast.makeText(context, "Current Weather data is empty", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "loadCurrentWeatherData: CurrentWeatherData is empty.");
         }
-        CurrentWeatherData currentWeatherData = gson.fromJson(json, CurrentWeatherData.class);
-        return currentWeatherData;
+        return gson.fromJson(json, CurrentWeatherData.class);
     }
 
     public static void registerPref(Context context, SharedPreferences.OnSharedPreferenceChangeListener listener) {

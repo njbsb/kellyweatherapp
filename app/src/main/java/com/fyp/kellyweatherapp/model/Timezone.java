@@ -1,6 +1,6 @@
 package com.fyp.kellyweatherapp.model;
 
-import com.fyp.kellyweatherapp.model.POJO.Daily;
+import com.fyp.kellyweatherapp.model.pojo.Daily;
 
 import java.util.ArrayList;
 

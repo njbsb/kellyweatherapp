@@ -7,6 +7,8 @@
     <color name="background">#BCB8B1</color>
     <color name="cardColor">#F4F3EE</color>
     <color name="cardColorDaily">#E0AFA0</color>
+    <color name="loginBackground">#fdcf76</color>
+    <color name="SignupBackground">#f6a7c1</color>
 
 
     <color name="background1">#EDB99D</color>

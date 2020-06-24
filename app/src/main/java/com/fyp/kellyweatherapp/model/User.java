@@ -1,7 +1,5 @@
 package com.fyp.kellyweatherapp.model;
 
-import com.fyp.kellyweatherapp.model.POJO.Daily;
-
 import java.util.List;
 
 public class User {

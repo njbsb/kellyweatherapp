@@ -1,4 +1,4 @@
-package com.fyp.kellyweatherapp.model.POJO;
+package com.fyp.kellyweatherapp.model.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -50,7 +50,6 @@ public class Weather {
     }
 
     public String getIconURL() {
-        String iconURL = String.format("https://openweathermap.org/img/wn/%s@2x.png", getIcon());
-        return iconURL;
+        return String.format("https://openweathermap.org/img/wn/%s@2x.png", getIcon());
     }
 }

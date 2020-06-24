@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -17,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fyp.kellyweatherapp.R;
 import com.fyp.kellyweatherapp.database.PrefConfig;
-import com.fyp.kellyweatherapp.model.POJO.Daily;
-import com.fyp.kellyweatherapp.model.POJO.Weather;
+import com.fyp.kellyweatherapp.model.pojo.Daily;
+import com.fyp.kellyweatherapp.model.pojo.Weather;
 import com.fyp.kellyweatherapp.model.User;
 import com.squareup.picasso.Picasso;
 
@@ -61,15 +60,7 @@ public class WeatherDailyAdapter extends RecyclerView.Adapter<WeatherDailyAdapte
                 .load(weather.getIconURL())
                 .error(R.drawable.ic_weatherwarning)
                 .into(holder.dailyImage);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(context, String.format("Card %s clicked", day.getDayName()), Toast.LENGTH_SHORT).show();
-                loadDialog(day, position);
-//                ForecastFragment dialogForecast = new ForecastFragment();
-//                dialogForecast.show(, "");
-            }
-        });
+        holder.cardView.setOnClickListener(v -> loadDialog(day, position));
     }
 
     private void loadDialog(Daily day, int position) {

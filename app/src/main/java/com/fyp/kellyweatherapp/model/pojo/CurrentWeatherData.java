@@ -1,4 +1,4 @@
-package com.fyp.kellyweatherapp.model.POJO;
+package com.fyp.kellyweatherapp.model.pojo;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

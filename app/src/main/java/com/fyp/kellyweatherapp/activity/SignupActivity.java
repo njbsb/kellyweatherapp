@@ -1,6 +1,6 @@
 package com.fyp.kellyweatherapp.activity;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -14,11 +14,6 @@ import android.widget.Toast;
 import com.fyp.kellyweatherapp.R;
 import com.fyp.kellyweatherapp.database.PrefConfig;
 import com.fyp.kellyweatherapp.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -79,18 +74,15 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             confirmpass.requestFocus();
         }
         else {
-            firebaseAuth.createUserWithEmailAndPassword(emaildata, passworddata).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()) {
-                        createDatabase(namedata, emaildata, firebaseAuth.getUid());
-                        Intent main = new Intent(SignupActivity.this, MainActivity.class);
-                        startActivity(main);
-                        finish();
-                    }
-                    else {
-                        Toast.makeText(SignupActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
-                    }
+            firebaseAuth.createUserWithEmailAndPassword(emaildata, passworddata).addOnCompleteListener(task -> {
+                if(task.isSuccessful()) {
+                    createDatabase(namedata, emaildata, firebaseAuth.getUid());
+                    Intent main = new Intent(SignupActivity.this, MainActivity.class);
+                    startActivity(main);
+                    finish();
+                }
+                else {
+                    Toast.makeText(SignupActivity.this, String.valueOf(task.getException()), Toast.LENGTH_SHORT).show();
                 }
             });
         }

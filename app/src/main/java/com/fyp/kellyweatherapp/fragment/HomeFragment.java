@@ -2,12 +2,8 @@ package com.fyp.kellyweatherapp.fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,28 +28,21 @@ import com.fyp.kellyweatherapp.R;
 import com.fyp.kellyweatherapp.adapter.WeatherDailyAdapter;
 import com.fyp.kellyweatherapp.api.Client;
 import com.fyp.kellyweatherapp.api.Service;
-import com.fyp.kellyweatherapp.model.POJO.CurrentWeatherData;
-import com.fyp.kellyweatherapp.model.POJO.Daily;
-import com.fyp.kellyweatherapp.model.POJO.WeatherData;
-import com.fyp.kellyweatherapp.model.User;
+import com.fyp.kellyweatherapp.model.pojo.CurrentWeatherData;
+import com.fyp.kellyweatherapp.model.pojo.Daily;
+import com.fyp.kellyweatherapp.model.pojo.WeatherData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -71,11 +59,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Shar
     private WeatherData weatherData;
     private CurrentWeatherData currentWeatherData;
 
-    private static String TAG = "HomeFragment";
-    public static String baseURL = "https://api.openweathermap.org/";
-    public static String exclude = "minutely,hourly";
-    public static String unit = "metric";
-    public static String APIkey = "2302b82a0d9bcf350233fdea946f8355";
+    private static final String TAG = "HomeFragment";
+    public static final String baseURL = "https://api.openweathermap.org/";
+    public static final String exclude = "minutely,hourly";
+    public static final String unit = "metric";
+    public static final String APIkey = "2302b82a0d9bcf350233fdea946f8355";
     public String latitude, longitude;
 
 
@@ -192,16 +180,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Shar
 //                return;
             }
             else {
-                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-                fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        String latitude = String.valueOf(location.getLatitude());
-                        String longitude = String.valueOf(location.getLongitude());
-                        PrefConfig.saveLatitude(Objects.requireNonNull(getContext()), latitude);
-                        PrefConfig.saveLongitude(getContext(), longitude);
-                        loadUIData();
-                    }
+                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
+                fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                    String latitude = String.valueOf(location.getLatitude());
+                    String longitude = String.valueOf(location.getLongitude());
+                    PrefConfig.saveLatitude(Objects.requireNonNull(getContext()), latitude);
+                    PrefConfig.saveLongitude(getContext(), longitude);
+                    loadUIData();
                 });
             }
         }
@@ -254,7 +239,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Shar
     }
 
     private String getUVdescription(double uvi) {
-        String desc = "";
+        String desc;
         if(uvi<3)
             desc = "Low";
         else if(uvi>=3 && uvi<=5)

@@ -8,20 +8,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
+
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,36 +22,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fyp.kellyweatherapp.R;
-import com.fyp.kellyweatherapp.adapter.ViewPagerAdapter;
+
 import com.fyp.kellyweatherapp.database.PrefConfig;
 import com.fyp.kellyweatherapp.fragment.HomeFragment;
 import com.fyp.kellyweatherapp.fragment.PlannerFragment;
 import com.fyp.kellyweatherapp.fragment.ProfileFragment;
 import com.fyp.kellyweatherapp.model.User;
-import com.google.android.gms.common.api.GoogleApiClient;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
-import java.util.Objects;
+import com.google.gson.Gson;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.INTERNET;
 
 public class MainActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener, NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int PERMISSION_REQ_CODE = 1;
-    private boolean firstTime = false;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
@@ -144,21 +127,18 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     public void getLocation() {
         if (PrefConfig.loadLatitude(this).equals("0") || PrefConfig.loadLongitude(getApplicationContext()).equals("0")) {
-            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, PERMISSION_REQ_CODE);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestRuntimePermissionLocation();
             } else {
                 FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-                fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            String latitude = String.valueOf(location.getLatitude());
-                            String longitude = String.valueOf(location.getLongitude());
-                            PrefConfig.saveLatitude(getApplicationContext(), latitude);
-                            PrefConfig.saveLongitude(getApplicationContext(), longitude);
-                        }
+                fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                    if (location != null) {
+                        String latitude = String.valueOf(location.getLatitude());
+                        String longitude = String.valueOf(location.getLongitude());
+                        PrefConfig.saveLatitude(getApplicationContext(), latitude);
+                        PrefConfig.saveLongitude(getApplicationContext(), longitude);
                     }
                 });
             }
@@ -194,23 +174,13 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
 
     public void requestRuntimePermissionLocation() {
 //        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        if (ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(this), ACCESS_FINE_LOCATION)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, ACCESS_FINE_LOCATION)) {
 
             new AlertDialog.Builder(this)
                     .setTitle("Location Permission Required")
                     .setMessage("You have to give  this permission to access this app.")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[] {ACCESS_COARSE_LOCATION}, 1);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setPositiveButton("OK", (dialog, which) -> ActivityCompat.requestPermissions(MainActivity.this, new String[] {ACCESS_COARSE_LOCATION}, PERMISSION_REQ_CODE))
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .create().show();
         }
         else {
@@ -263,32 +233,5 @@ public class MainActivity extends AppCompatActivity implements FirebaseAuth.Auth
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    public class LoadUserDataFB extends AsyncTask {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected Object doInBackground(Object[] objects) {
-//            Looper.prepare();
-//            User user = User.getInstance();
-//            if(user.getNotesList() == null) {
-//                shortToast("list is null");
-//            }
-//            else if(user.getNotesList().isEmpty()) {
-//                shortToast("list empty");
-//            }
-//            else {
-//                shortToast(user.getNotesList().toString());
-//            }
-//            runOnUiThread(MainActivity.this::getLocation);
-            return null;
-        }
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-        }
-    }
 
 }

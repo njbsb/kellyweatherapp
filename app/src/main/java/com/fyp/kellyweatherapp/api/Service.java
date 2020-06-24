@@ -1,7 +1,7 @@
 package com.fyp.kellyweatherapp.api;
 
-import com.fyp.kellyweatherapp.model.POJO.CurrentWeatherData;
-import com.fyp.kellyweatherapp.model.POJO.WeatherData;
+import com.fyp.kellyweatherapp.model.pojo.CurrentWeatherData;
+import com.fyp.kellyweatherapp.model.pojo.WeatherData;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;

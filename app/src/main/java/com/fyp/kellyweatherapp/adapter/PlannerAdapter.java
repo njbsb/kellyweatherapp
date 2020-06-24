@@ -16,9 +16,9 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.fyp.kellyweatherapp.R;
 import com.fyp.kellyweatherapp.database.PrefConfig;
 import com.fyp.kellyweatherapp.model.Notes;
-import com.fyp.kellyweatherapp.model.POJO.Daily;
-import com.fyp.kellyweatherapp.model.POJO.Weather;
-import com.fyp.kellyweatherapp.model.POJO.WeatherData;
+import com.fyp.kellyweatherapp.model.pojo.Daily;
+import com.fyp.kellyweatherapp.model.pojo.Weather;
+import com.fyp.kellyweatherapp.model.pojo.WeatherData;
 import com.fyp.kellyweatherapp.model.User;
 import com.squareup.picasso.Picasso;
 
@@ -66,7 +66,7 @@ public class PlannerAdapter extends PagerAdapter {
             plannerNote.setText(user.getNotesList().get(position).getNotes());
         }
         else {
-            plannerNote.setText("takde note");
+            plannerNote.setText(R.string.no_notes);
             List<Notes> notesList = new ArrayList<>();
             for(int i = 0; i<weatherData.getDaily().size(); i++) {
                 Notes note = new Notes();
@@ -82,13 +82,10 @@ public class PlannerAdapter extends PagerAdapter {
         Picasso.get().load(weather.getIconURL()).error(R.drawable.ic_weatherwarning).into(plannericon);
         plannerNote.setHint("ha nak tulis apa");
 
-        plannerSaveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String note = plannerNote.getText().toString();
-                if(!note.equals("")) {
-                    saveNotes(context, weatherData.getDaily(), note, position);
-                }
+        plannerSaveBtn.setOnClickListener(v -> {
+            String note = plannerNote.getText().toString();
+            if(!note.equals("")) {
+                saveNotes(context, weatherData.getDaily(), note, position);
             }
         });
 

@@ -7,13 +7,14 @@
     tools:context=".activity.SignupActivity"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#f6a7c1"
+    android:background="@color/SignupBackground"
     style="@style/AppTheme.NoActionBar">
     <ImageView
         android:src="@drawable/appicon"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        tools:ignore="ContentDescription" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,28 +28,28 @@
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="@string/name"
         android:id="@+id/et_name"
         android:inputType="text"
         android:textColor="@android:color/white"/>
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="@string/email"
         android:id="@+id/et_email"
         android:inputType="textEmailAddress"
         android:textColor="@android:color/white"/>
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="@string/password"
         android:id="@+id/et_pass"
         android:inputType="textPassword"
         android:textColor="@android:color/white"/>
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Confirm Password"
+        android:hint="@string/confirm_password"
         android:id="@+id/et_confirmpass"
         android:inputType="textPassword"
         android:textColor="@android:color/white"/>
@@ -56,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btn_signup"
-        android:text="Sign up"
+        android:text="@string/sign_up"
         android:textAllCaps="false"
         android:layout_marginTop="6dp"
         />
@@ -65,7 +66,7 @@
         android:id="@+id/text_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login here"
+        android:text="@string/login_here"
         android:textColor="@android:color/white"/>
 
 </LinearLayout>
