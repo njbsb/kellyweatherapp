@@ -29,6 +29,5 @@
     <string name="uv_index">UV Index</string>
     <string name="save">save</string>
     <string name="day_date_cond">Day + date + cond</string>
-    <string name="planner">Planner</string>
     <string name="no_notes">no notes</string>
 </resources>
