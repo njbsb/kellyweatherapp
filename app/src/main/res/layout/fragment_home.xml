@@ -51,7 +51,7 @@
         android:id="@+id/txt_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="city, Country"
+        android:hint="@string/city_country"
         android:textColor="@color/textcolor"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -66,7 +66,7 @@
         android:id="@+id/txt_coordinate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="latitude, longitude"
+        android:hint="@string/latitude_longitude"
         android:textColor="@color/textcolor"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/currentIcon"
@@ -90,7 +90,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:cardBackgroundColor="@color/cardColor"
@@ -104,12 +104,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp">
+
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
                 android:text="@string/details"
                 android:textSize="14sp"
                 android:textStyle="bold"

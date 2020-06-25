@@ -30,4 +30,6 @@
     <string name="save">save</string>
     <string name="day_date_cond">Day + date + cond</string>
     <string name="no_notes">no notes</string>
+    <string name="city_country">city, Country</string>
+    <string name="latitude_longitude">latitude, longitude</string>
 </resources>
